@@ -8,6 +8,7 @@ void main() {
     debugShowCheckedModeBanner: false,
     theme: ThemeData(
         brightness: Brightness.dark, primaryColor: Colors.lightBlue[600]),
+    home: const MyApp(),
   ));
 }
 
@@ -75,6 +76,51 @@ class _MyAppState extends State<MyApp> {
             onChanged: (String price) {
               getPrice(price);
             },
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            textDirection: TextDirection.ltr,
+            children: <Widget>[
+              SizedBox(
+                height: 35,
+                width: 70,
+                child: FloatingActionButton(
+                  backgroundColor: Colors.green,
+                  onPressed: () {},
+                  child: Text("Create"),
+                ),
+              ),
+              SizedBox(
+                height: 35,
+                width: 70,
+                child: FloatingActionButton(
+                  backgroundColor: Colors.yellow,
+                  onPressed: () {},
+                  child: Text("Read"),
+                ),
+              ),
+              SizedBox(
+                height: 35,
+                width: 70,
+                child: FloatingActionButton(
+                  backgroundColor: Colors.purple,
+                  onPressed: () {},
+                  child: Text("Update"),
+                ),
+              ),
+              SizedBox(
+                height: 35,
+                width: 70,
+                child: FloatingActionButton(
+                  backgroundColor: Colors.red,
+                  onPressed: () {},
+                  child: Text("Delete"),
+                ),
+              )
+            ],
           )
         ],
       ),
