@@ -50,6 +50,30 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
+  createData() {
+    if (kDebugMode) {
+      print("Create Data");
+    }
+  }
+
+  readData() {
+    if (kDebugMode) {
+      print("Read Data");
+    }
+  }
+
+  updateData() {
+    if (kDebugMode) {
+      print("Update Data");
+    }
+  }
+
+  deleteData() {
+    if (kDebugMode) {
+      print("Delete Data");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -89,7 +113,9 @@ class _MyAppState extends State<MyApp> {
                 width: 70,
                 child: FloatingActionButton(
                   backgroundColor: Colors.green,
-                  onPressed: () {},
+                  onPressed: () {
+                    createData();
+                  },
                   child: Text("Create"),
                 ),
               ),
@@ -97,8 +123,10 @@ class _MyAppState extends State<MyApp> {
                 height: 35,
                 width: 70,
                 child: FloatingActionButton(
-                  backgroundColor: Colors.yellow,
-                  onPressed: () {},
+                  backgroundColor: Colors.blueAccent,
+                  onPressed: () {
+                    readData();
+                  },
                   child: Text("Read"),
                 ),
               ),
@@ -107,7 +135,9 @@ class _MyAppState extends State<MyApp> {
                 width: 70,
                 child: FloatingActionButton(
                   backgroundColor: Colors.purple,
-                  onPressed: () {},
+                  onPressed: () {
+                    updateData();
+                  },
                   child: Text("Update"),
                 ),
               ),
@@ -116,7 +146,9 @@ class _MyAppState extends State<MyApp> {
                 width: 70,
                 child: FloatingActionButton(
                   backgroundColor: Colors.red,
-                  onPressed: () {},
+                  onPressed: () {
+                    deleteData();
+                  },
                   child: Text("Delete"),
                 ),
               )
