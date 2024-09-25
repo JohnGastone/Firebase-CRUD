@@ -1,7 +1,8 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
-
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, avoid_print
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:sqlitecrud/database/dbHelper.dart';
+import 'package:sqlitecrud/model/dish.dart';
 
 void main() {
   runApp(MaterialApp(
@@ -51,27 +52,42 @@ class _MyAppState extends State<MyApp> {
   }
 
   createData() {
-    if (kDebugMode) {
-      print("Create Data");
-    }
-  }
-
-  readData() {
-    if (kDebugMode) {
-      print("Read Data");
-    }
+    var dbHelper = Dbhelper();
+    var dish = Dish(name: name, description: description, price: price);
+    dbHelper.createDish(dish);
   }
 
   updateData() {
-    if (kDebugMode) {
-      print("Update Data");
+    var dbHelper = Dbhelper();
+    var dish = Dish(name: name, description: description, price: price);
+    dbHelper.updateDish(dish);
+  }
+
+  Future<void> readData(String name) async {
+    var dbHelper = Dbhelper();
+    try {
+      Dish dish = await dbHelper.readDish(name); // Use readDish(name)
+      print("${dish.name}, ${dish.description}, ${dish.price}");
+    } catch (error) {
+      print("Error reading dish data: $error"); // Handle error (optional)
+    }
+  }
+
+  Future<List<Dish>> readDishList() async {
+    var dbHelper = Dbhelper();
+    try {
+      List<Dish> dishes = await dbHelper.readDishList(); // Use readDataList()
+      print(dishes);
+      return dishes; // Add return statement
+    } catch (error) {
+      print("Error reading dish data: $error"); // Handle error (optional)
+      return []; // Add return statement for non-nullable type
     }
   }
 
   deleteData() {
-    if (kDebugMode) {
-      print("Delete Data");
-    }
+    var dbHelper = Dbhelper();
+    dbHelper.deleteDish(name);
   }
 
   @override
@@ -125,7 +141,7 @@ class _MyAppState extends State<MyApp> {
                 child: FloatingActionButton(
                   backgroundColor: Colors.blueAccent,
                   onPressed: () {
-                    readData();
+                    readData(name);
                   },
                   child: Text("Read"),
                 ),
