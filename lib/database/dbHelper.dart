@@ -47,6 +47,19 @@ class Dbhelper {
   Future<int> updateDish(Dish dish) async {
     var dbReady = await db;
     return await dbReady.rawUpdate(
-        "UPDATE Dishes SET name='${dish.name}', description='${dish.description}', price='${dish.price}' WHERE id=${dish.name}");
+        "UPDATE Dishes SET name='${dish.name}', description='${dish.description}', price='${dish.price}' WHERE name=${dish.name}");
+  }
+
+  // Delete Data Method
+  Future<int> deleteDish(String name) async {
+    var dbReady = await db;
+    return await dbReady.rawDelete("DELETE FROM Dishes WHERE name='$name'");
+  }
+
+  // Read Data Method
+  Future<Dish> getAllDishes() async {
+    var dbReady = await db;
+    var read = await dbReady.rawQuery("SELECT * FROM Dishes");
+    return Dish.fromMap(read[0]);
   }
 }
