@@ -52,15 +52,23 @@ class _MyAppState extends State<MyApp> {
   }
 
   createData() {
-    var dbHelper = Dbhelper();
-    var dish = Dish(name: name, description: description, price: price);
-    dbHelper.createDish(dish);
+    setState(
+      () {
+        var dbHelper = Dbhelper();
+        var dish = Dish(name: name, description: description, price: price);
+        dbHelper.createDish(dish);
+      },
+    );
   }
 
   updateData() {
-    var dbHelper = Dbhelper();
-    var dish = Dish(name: name, description: description, price: price);
-    dbHelper.updateDish(dish);
+    setState(
+      () {
+        var dbHelper = Dbhelper();
+        var dish = Dish(name: name, description: description, price: price);
+        dbHelper.updateDish(dish);
+      },
+    );
   }
 
   Future<void> readData(String name) async {
@@ -86,8 +94,10 @@ class _MyAppState extends State<MyApp> {
   }
 
   deleteData() {
-    var dbHelper = Dbhelper();
-    dbHelper.deleteDish(name);
+    setState(() {
+      var dbHelper = Dbhelper();
+      dbHelper.deleteDish(name);
+    });
   }
 
   @override
@@ -173,32 +183,28 @@ class _MyAppState extends State<MyApp> {
           SizedBox(
             height: 10,
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(child: Text("Name")),
-                Expanded(child: Text("Description")),
-                Expanded(child: Text("Price"))
-              ],
-            ),
-          ),
           FutureBuilder<List<Dish>>(
               future: readDishList(),
               builder: (context, snapshot) {
-                return ListView.builder(
-                  itemBuilder: (context, index) {
-                    if (snapshot.data!.isEmpty) {
-                      return Text("No dishes found.");
-                    }
-                    return ListTile(
-                      title: Text(snapshot.data![index].name),
-                      subtitle: Text(snapshot.data![index].description),
-                      trailing: Text(snapshot.data![index].price.toString()),
-                    );
-                  },
-                  itemCount: snapshot.data!.length,
+                return SizedBox(
+                  height: 200,
+                  child: ListView.builder(
+                    itemBuilder: (context, index) {
+                      if (snapshot.data!.isEmpty) {
+                        return Text("No dishes found.");
+                      }
+                      return ListTile(
+                        title: Text(snapshot.data![index].name,
+                            style: TextStyle(fontSize: 18)),
+                        subtitle: Text(snapshot.data![index].description),
+                        trailing: Text(
+                          snapshot.data![index].price.toString(),
+                          style: TextStyle(fontSize: 18),
+                        ),
+                      );
+                    },
+                    itemCount: snapshot.data!.length,
+                  ),
                 );
               })
         ],

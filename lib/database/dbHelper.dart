@@ -5,9 +5,9 @@ import 'package:path/path.dart';
 import 'package:sqlitecrud/model/dish.dart';
 
 class Dbhelper {
-  late Database _db;
+  Database? _db; // Nullable to avoid initialization error
 
-  initDb() async {
+  Future<Database> initDb() async {
     String databasePath = await getDatabasesPath();
     String dbPath = join(databasePath, 'CRUDdb.db');
 
@@ -20,53 +20,57 @@ class Dbhelper {
       '''
       CREATE TABLE IF NOT EXISTS Dishes (
         name TEXT NOT NULL,
-        description TEXT ,
-        price DOUBLE  NOT NULL
+        description TEXT,
+        price DOUBLE NOT NULL
       );
       ''',
     );
   }
 
   Future<Database> get db async {
-    if (_db == null) {
-      _db = await initDb();
-      return _db;
-    } else {
-      return _db;
-    }
+    _db ??= await initDb();
+    return _db!; // Safely return the non-nullable _db
   }
 
-  //Create Data method
+  // Create Data method
   Future<int> createDish(Dish dish) async {
-    var dbReady = await db;
+    var dbReady = await db; // Ensure db is ready
     return await dbReady.rawInsert(
-        "INSERT INTO Dishes(name, description, price) VALUES('${dish.name}', '${dish.description}', '${dish.price}') ");
+        "INSERT INTO Dishes(name, description, price) VALUES('${dish.name}', '${dish.description}', '${dish.price}')");
   }
 
   // Update Data Method
   Future<int> updateDish(Dish dish) async {
-    var dbReady = await db;
+    var dbReady = await db; // Ensure db is ready
     return await dbReady.rawUpdate(
-        "UPDATE Dishes   SET name='${dish.name}', description='${dish.description}', price='${dish.price}' WHERE name=${dish.name}");
+        "UPDATE Dishes SET description='${dish.description}', price='${dish.price}' WHERE name='${dish.name}'");
   }
 
   // Delete Data Method
   Future<int> deleteDish(String name) async {
-    var dbReady = await db;
+    var dbReady = await db; // Ensure db is ready
     return await dbReady.rawDelete("DELETE FROM Dishes WHERE name='$name'");
   }
 
-  // Read Data Method (The mpst recent Single Entry)
+  // Read Single Entry
   Future<Dish> readDish(String name) async {
-    var dbReady = await db;
-    var read = await dbReady.rawQuery("SELECT * FROM Dishes");
-    return Dish.fromMap(read[0]);
+    var dbReady = await db; // Ensure db is ready
+    var result =
+        await dbReady.rawQuery("SELECT * FROM Dishes WHERE name='$name'");
+    if (result.isNotEmpty) {
+      return Dish.fromMap(
+          result.first); // Return the first entry matching the name
+    } else {
+      throw Exception("Dish not found");
+    }
   }
 
-  // Read Data Method (All Entries)
+  // Read All Entries
   Future<List<Dish>> readDishList() async {
-    var dbReady = await db;
-    var read = await dbReady.rawQuery("SELECT * FROM Dishes");
-    return read.map((Map<String, dynamic> row) => Dish.fromMap(row)).toList();
+    var dbReady = await db; // Ensure db is ready
+    var result = await dbReady.rawQuery("SELECT * FROM Dishes");
+    return result
+        .map((data) => Dish.fromMap(data))
+        .toList(); // Convert to List<Dish>
   }
 }
