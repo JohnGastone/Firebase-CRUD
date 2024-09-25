@@ -169,7 +169,38 @@ class _MyAppState extends State<MyApp> {
                 ),
               )
             ],
-          )
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(child: Text("Name")),
+                Expanded(child: Text("Description")),
+                Expanded(child: Text("Price"))
+              ],
+            ),
+          ),
+          FutureBuilder<List<Dish>>(
+              future: readDishList(),
+              builder: (context, snapshot) {
+                return ListView.builder(
+                  itemBuilder: (context, index) {
+                    if (snapshot.data!.isEmpty) {
+                      return Text("No dishes found.");
+                    }
+                    return ListTile(
+                      title: Text(snapshot.data![index].name),
+                      subtitle: Text(snapshot.data![index].description),
+                      trailing: Text(snapshot.data![index].price.toString()),
+                    );
+                  },
+                  itemCount: snapshot.data!.length,
+                );
+              })
         ],
       ),
     );
